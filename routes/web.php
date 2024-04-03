@@ -4,6 +4,7 @@
 //use App\Models\User;
 
 use App\Models\{
+    Course,
     User,
     Preference
 };
@@ -20,6 +21,37 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/one-to-many', function () {
+   // $course = Course::create(['name' => 'Curso de Laravelg']);
+
+    $course = Course::with('modules.lessons')->first();
+
+    echo $course->name;
+    echo '<br>';
+    foreach ($course->modules as $module) {
+        echo "Módulo {$module->name} <br>";
+        foreach ($module->lessons as $lesson) {
+            echo "x Aula {$lesson->name} <br>";
+            
+        }
+    }
+
+    $data = [
+        'name' => 'Módulo 2'
+    ];
+
+   
+
+    //$course->modules()->create($data);
+
+            //Module::find(2)->update(//$data//);
+
+    //$course->modules()->get();
+    $modules = $course->modules;
+
+   // dd($modules);
+});
 
 Route::get('/one-to-one', function () {
     $user = User::with('preference')->find(2); //with()
